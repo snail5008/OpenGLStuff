@@ -34,7 +34,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\res\shaders\default.glsl">
+    <None Include=".gitignore" />
+    <None Include="res\shaders\default.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

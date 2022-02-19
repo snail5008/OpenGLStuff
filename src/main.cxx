@@ -15,9 +15,9 @@ int main() {
 	window.load_opengl();
 
 	float triangle[6] = {
-		0.0f, 1.0f,
-		1.0, -1.0f,
-		-1.0f, -1.0f
+		0.f, .5f,
+		.5, -.5f,
+		-.5f, -.5f
 	};
 
 	Vbo vbo;
@@ -30,8 +30,11 @@ int main() {
 	glVertexAttribPointer(0, 2, GL_FLOAT, false, sizeof(float)*2, (const void*)0);
 
 	while (!window.should_close()) {
+		default_shader.use();
+
 		glClearColor(0.2f, 0.5f, 0.7f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		window.swap_buffers();
