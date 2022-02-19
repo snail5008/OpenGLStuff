@@ -1,6 +1,8 @@
 #pragma once
 
 #include <glad/glad.h>
+#include "Vbo.h"
+#include "Shader.h"
 
 class Renderer {
 public:
