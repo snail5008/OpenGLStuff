@@ -29,6 +29,8 @@ int main() {
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, false, sizeof(float)*2, (const void*)0);
 
+	glfwSwapInterval(1);
+
 	while (!window.should_close()) {
 		default_shader.use();
 
