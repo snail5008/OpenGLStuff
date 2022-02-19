@@ -6,6 +6,8 @@
 #include <fstream>
 #include <sstream>
 
+#include "Errors.h"
+
 
 
 
@@ -24,26 +26,26 @@ public:
 		vertex_source = vertex_src.c_str();
 		fragment_source = fragment_src.c_str();
 
-		vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-		fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+		check(vertex_shader = glCreateShader(GL_VERTEX_SHADER));
+		check(fragment_shader = glCreateShader(GL_FRAGMENT_SHADER));
 
-		glShaderSource(vertex_shader, 1, &vertex_source, nullptr);
-		glShaderSource(fragment_shader, 1, &fragment_source, nullptr);
+		check(glShaderSource(vertex_shader, 1, &vertex_source, nullptr));
+		check(glShaderSource(fragment_shader, 1, &fragment_source, nullptr));
 
-		glCompileShader(vertex_shader);
-		glCompileShader(fragment_shader);
+		check(glCompileShader(vertex_shader));
+		check(glCompileShader(fragment_shader));
 
 
-		program = glCreateProgram();
+		check(program = glCreateProgram());
 
-		glAttachShader(program, vertex_shader);
-		glAttachShader(program, fragment_shader);
+		check(glAttachShader(program, vertex_shader));
+		check(glAttachShader(program, fragment_shader));
 
-		glLinkProgram(program);
-		glValidateProgram(program);
+		check(glLinkProgram(program));
+		check(check(glValidateProgram(program)));
 
-		glDeleteShader(vertex_shader);
-		glDeleteShader(fragment_shader);
+		check(glDeleteShader(vertex_shader));
+		check(glDeleteShader(fragment_shader));
 	}
 
 	Shader(std::string filename) {
@@ -90,26 +92,26 @@ public:
 		fragment_source = fragment_source_string.c_str();
 
 
-		vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-		fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+		check(vertex_shader = glCreateShader(GL_VERTEX_SHADER));
+		check(fragment_shader = glCreateShader(GL_FRAGMENT_SHADER));
 
-		glShaderSource(vertex_shader, 1, &vertex_source, nullptr);
-		glShaderSource(fragment_shader, 1, &fragment_source, nullptr);
+		check(glShaderSource(vertex_shader, 1, &vertex_source, nullptr));
+		check(glShaderSource(fragment_shader, 1, &fragment_source, nullptr));
 
-		glCompileShader(vertex_shader);
-		glCompileShader(fragment_shader);
+		check(glCompileShader(vertex_shader));
+		check(glCompileShader(fragment_shader));
 
 
-		program = glCreateProgram();
+		check(program = glCreateProgram());
 
-		glAttachShader(program, vertex_shader);
-		glAttachShader(program, fragment_shader);
+		check(glAttachShader(program, vertex_shader));
+		check(glAttachShader(program, fragment_shader));
 
-		glLinkProgram(program);
-		glValidateProgram(program);
+		check(glLinkProgram(program));
+		check(glValidateProgram(program));
 
-		glDeleteShader(vertex_shader);
-		glDeleteShader(fragment_shader);
+		check(glDeleteShader(vertex_shader));
+		check(glDeleteShader(fragment_shader));
 	}
 
 	void get_errors() {
@@ -117,9 +119,9 @@ public:
 		char message[1024];
 
 
-		glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
+		check(glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success));
 		if (!success) {
-			glGetShaderInfoLog(vertex_shader, 1024, 0, message);
+			check(glGetShaderInfoLog(vertex_shader, 1024, 0, message));
 
 			std::cout << "--- vertex shader failed to compile ---\n\n" << message << "--------\n\n";
 		}
@@ -127,18 +129,18 @@ public:
 			std::cout << "vertex shader successfully compiled\n";
 
 
-		glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
+		check(glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success));
 		if (!success) {
-			glGetShaderInfoLog(fragment_shader, 1024, 0, message);
+			check(glGetShaderInfoLog(fragment_shader, 1024, 0, message));
 
 			std::cout << "--- fragment shader failed to compile ---\n\n" << message << "--------\n\n";
 		}
 		else
 			std::cout << "fragment shader successfully compiled\n";
 
-		glGetShaderiv(program, GL_LINK_STATUS, &success);
+		check(glGetProgramiv(program, GL_LINK_STATUS, &success));
 		if (!success) {
-			glGetShaderInfoLog(program, 1024, 0, message);
+			check(glGetShaderInfoLog(program, 1024, 0, message));
 
 			std::cout << "--- shader program failed to link ---\n\n" << message << "--------\n\n";
 		}
@@ -147,10 +149,10 @@ public:
 	}
 	
 	~Shader() {
-		glDeleteProgram(program);
+		check(glDeleteProgram(program));
 	}
 
 	void use() {
-		glUseProgram(program);
+		check(glUseProgram(program));
 	}
 };

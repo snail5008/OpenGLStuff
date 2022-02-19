@@ -26,18 +26,18 @@ int main() {
 	Shader default_shader("res/shaders/default.glsl");
 	default_shader.get_errors();
 
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, false, sizeof(float)*2, (const void*)0);
+	check(glEnableVertexAttribArray(0));
+	check(glVertexAttribPointer(0, 2, GL_FLOAT, false, sizeof(float)*2, (const void*)0));
 
 	glfwSwapInterval(1);
 
 	while (!window.should_close()) {
 		default_shader.use();
 
-		glClearColor(0.2f, 0.5f, 0.7f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		check(glClearColor(0.2f, 0.5f, 0.7f, 1.0f));
+		check(glClear(GL_COLOR_BUFFER_BIT));
 
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		check(glDrawArrays(GL_TRIANGLES, 0, 3));
 
 		window.swap_buffers();
 		window.poll_events();

@@ -32,6 +32,9 @@
     <ClInclude Include="src\Vbo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Errors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

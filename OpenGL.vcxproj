@@ -160,6 +160,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Errors.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\Vbo.h" />
     <ClInclude Include="src\Window.h" />
