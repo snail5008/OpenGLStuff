@@ -3,6 +3,7 @@
 #include "Window.h"
 #include "Shader.h"
 #include "Vbo.h"
+#include "Renderer.h"
 
 
 int main() {
@@ -31,11 +32,11 @@ int main() {
 
 	glfwSwapInterval(1);
 
-	while (!window.should_close()) {
-		default_shader.use();
+	default_shader.use();
 
-		check(glClearColor(0.2f, 0.5f, 0.7f, 1.0f));
-		check(glClear(GL_COLOR_BUFFER_BIT));
+	Renderer renderer;
+	while (!window.should_close()) {
+		renderer.clear_colour(0.2, 0.5, 0.7);
 
 		check(glDrawArrays(GL_TRIANGLES, 0, 3));
 
