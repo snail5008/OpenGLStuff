@@ -3,46 +3,37 @@
 
 #include "Window.h"
 #include "Shader.h"
+#include "Vao.h"
 #include "Vbo.h"
 #include "Renderer.h"
+#include "Primitives.h"
 
 
 int main() {
-	Window window(800, 600, "triangle", 4, 4, 6);
+#ifdef DEBUG
+	std::cout << "Debug build\n";
+#else
+	std::cout << "Release build\n";
+#endif
+
+
+	Window window(800, 600, "triangle");
 	window.create_context();
 	window.load_opengl();
+	window.enable_vsync();
+	window.enable_msaa();
+	window.update_when_resized();
 
-	check(glViewport(0, 0, 800, 600));
-	glfwSetWindowSizeCallback(window.window, [](GLFWwindow* window, int width, int height) {
-		check(glViewport(0, 0, width, height));
-	});
-
-	check(glEnable(GL_MULTISAMPLE));
-
-	float triangle[6] = {
-		0.f, .5f,
-		.5, -.5f,
-		-.5f, -.5f
-	};
-
-	unsigned int vao;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+	Vao vao;
+	vao.bind();
 
 	Vbo vbo;
-	vbo.data(sizeof(triangle), triangle);
+	vbo.data(sizeof(Primitives::triangle), Primitives::triangle);
 
-	std::cout << glGetString(GL_VERSION) << '\n';
+	vao.vertex_attrib_ptr(0, Vao::THREE_DIMENSIONAL, sizeof(float) * 2);
 
 	Shader program("res/shaders/default.glsl");
 	program.get_errors();
-
-	check(glEnableVertexAttribArray(0));
-	check(glVertexAttribPointer(0, 2, GL_FLOAT, false, sizeof(float)*2, (const void*)0));
-	
-
-	glfwSwapInterval(1);
-	
 
 	program.use();
 	check(int loc = glGetUniformLocation(program.program, "u_Time"));
@@ -52,7 +43,8 @@ int main() {
 		renderer.clear_colour(0.2f, 0.5f, 0.7f);
 
 		check(glUniform1f(loc, (float)glfwGetTime()));
-		check(glDrawArrays(GL_TRIANGLES, 0, 3));
+
+		vao.draw_arrays(3);
 
 		window.swap_buffers();
 		window.poll_events();

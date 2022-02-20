@@ -155,4 +155,8 @@ public:
 	void use() {
 		check(glUseProgram(program));
 	}
+
+	int uniform_location(const char* uniform_name) {
+		check(return glGetUniformLocation(program, uniform_name));
+	}
 };

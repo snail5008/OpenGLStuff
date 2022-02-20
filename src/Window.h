@@ -2,6 +2,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "Errors.h"
+
 /* wrapper class around GLFW */
 class Window {
 public:
@@ -43,5 +45,23 @@ public:
 
 	void set_title(const char* title) {
 		glfwSetWindowTitle(window, title);
+	}
+
+	void enable_vsync() {
+		glfwSwapInterval(1);
+	}
+
+	void enable_msaa() {
+		check(glEnable(GL_MULTISAMPLE));
+	}
+
+	void disable_msaa() {
+		check(glDisable(GL_MULTISAMPLE));
+	}
+
+	void update_when_resized() {
+		glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int width, int height) {
+			check(glViewport(0, 0, width, height));
+		});
 	}
 };

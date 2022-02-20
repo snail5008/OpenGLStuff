@@ -3,7 +3,11 @@
 #include <glad/glad.h>
 #include <iostream>
 
-#define check(fn) clearErrors();fn;getError(__func__, __FILE__, __LINE__);
+#ifdef DEBUG
+	#define check(fn) clearErrors();fn;getError(__func__, __FILE__, __LINE__);
+#else
+	#define check(fn) fn
+#endif
 
 void clearErrors() {
 	while (glGetError() != GL_NO_ERROR);
