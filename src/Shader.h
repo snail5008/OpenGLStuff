@@ -159,4 +159,9 @@ public:
 	int uniform_location(const char* uniform_name) {
 		check(return glGetUniformLocation(program, uniform_name));
 	}
+
+
+	void set_uniform1f(int uniform_location, float val) {
+		check(glUniform1f(uniform_location, val));
+	}
 };
