@@ -7,8 +7,13 @@ class Window {
 public:
 	GLFWwindow* window;
 public:
-	Window(unsigned int width, unsigned int height, const char* title) : window() {
+	Window(unsigned int width, unsigned int height, const char* title, int samples = 4, int version_major = 4, int version_minor = 6) : window() {
 		glfwInit();
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, version_major);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, version_minor);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+		glfwWindowHint(GLFW_SAMPLES, samples);
 		window = glfwCreateWindow(width, height, title, nullptr, nullptr);
 	}
 	~Window() {

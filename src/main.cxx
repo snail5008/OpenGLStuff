@@ -8,13 +8,16 @@
 
 
 int main() {
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-	Window window(800, 600, "triangle");
+	Window window(800, 600, "triangle", 4, 4, 6);
 	window.create_context();
 	window.load_opengl();
+
+	check(glViewport(0, 0, 800, 600));
+	glfwSetWindowSizeCallback(window.window, [](GLFWwindow* window, int width, int height) {
+		check(glViewport(0, 0, width, height));
+	});
+
+	check(glEnable(GL_MULTISAMPLE));
 
 	float triangle[6] = {
 		0.f, .5f,
@@ -22,8 +25,14 @@ int main() {
 		-.5f, -.5f
 	};
 
+	unsigned int vao;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
 	Vbo vbo;
 	vbo.data(sizeof(triangle), triangle);
+
+	std::cout << glGetString(GL_VERSION) << '\n';
 
 	Shader program("res/shaders/default.glsl");
 	program.get_errors();
@@ -33,6 +42,7 @@ int main() {
 	
 
 	glfwSwapInterval(1);
+	
 
 	program.use();
 	check(int loc = glGetUniformLocation(program.program, "u_Time"));
@@ -41,7 +51,7 @@ int main() {
 	while (!window.should_close()) {
 		renderer.clear_colour(0.2f, 0.5f, 0.7f);
 
-		check(glUniform1f(loc, glfwGetTime()));
+		check(glUniform1f(loc, (float)glfwGetTime()));
 		check(glDrawArrays(GL_TRIANGLES, 0, 3));
 
 		window.swap_buffers();
