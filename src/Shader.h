@@ -164,4 +164,8 @@ public:
 	void set_uniform1f(int uniform_location, float val) {
 		check(glUniform1f(uniform_location, val));
 	}
+
+	void set_uniform1i(int uniform_location, int val) {
+		check(glUniform1i(uniform_location, val));
+	}
 };

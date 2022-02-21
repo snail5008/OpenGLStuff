@@ -20,8 +20,11 @@ public:
 		check(glBindVertexArray(vao));
 	}
 
+	void unbind() {
+		check(glBindVertexArray(0));
+	}
+
 	void vertex_attrib_ptr(int idx, int size, int stride, int type = GL_FLOAT, const void* pointer = 0, bool normalised = false) {
-		bind();
 		check(glEnableVertexAttribArray(idx));
 		check(glVertexAttribPointer(idx, size, type, normalised, stride, pointer));
 	}
@@ -30,7 +33,6 @@ public:
 	// @param mode: the primarive to draw with (def. GL_TRIANGLES)
 	// @param first: the vert to start drawing at
 	void draw_arrays(int count, unsigned int mode = GL_TRIANGLES, int first = 0) {
-		bind();
 		check(glDrawArrays(mode, first, count));
 	}
 };

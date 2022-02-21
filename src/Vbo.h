@@ -15,13 +15,15 @@ public:
 		check(glDeleteBuffers(1, &buffer));
 	}
 
-	void bind(int target = GL_STATIC_DRAW) {
+	void bind(int target = GL_ARRAY_BUFFER) {
 		check(glBindBuffer(target, buffer));
 	}
 
-	void data(long long int size, const void* data, int usage = GL_STATIC_DRAW, unsigned int target = GL_ARRAY_BUFFER, bool should_bind=true) {
-		if (should_bind)
-			bind(target);
+	void unbind() {
+		check(glBindBuffer(GL_ARRAY_BUFFER, 0));
+	}
+
+	void data(long long int size, const void* data, int usage = GL_STATIC_DRAW, unsigned int target = GL_ARRAY_BUFFER) {
 		check(glBufferData(target, size, data, usage));
 	}
 };

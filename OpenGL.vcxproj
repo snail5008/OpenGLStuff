@@ -164,6 +164,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Ebo.h" />
     <ClInclude Include="src\Errors.h" />
     <ClInclude Include="src\Primitives.h" />
     <ClInclude Include="src\Renderer.h" />
