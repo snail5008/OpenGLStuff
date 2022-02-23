@@ -7,7 +7,7 @@ uniform bool u_AnimationDisabled;
 
 void main() {
 	if (!u_AnimationDisabled)
-		gl_Position.xyz = pos*abs(sin(u_Time));
+		gl_Position.xyz = pos*sin(abs((u_Time)));
 	else
 		gl_Position.xyz = pos;
 		

@@ -50,8 +50,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
-    <None Include="res\shaders\default.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
   </ItemGroup>
 </Project>

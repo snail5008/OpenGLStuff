@@ -23,29 +23,7 @@ public:
 
 public:
 	Shader(std::string& vertex_src, std::string& fragment_src) {
-		vertex_source = vertex_src.c_str();
-		fragment_source = fragment_src.c_str();
-
-		check(vertex_shader = glCreateShader(GL_VERTEX_SHADER));
-		check(fragment_shader = glCreateShader(GL_FRAGMENT_SHADER));
-
-		check(glShaderSource(vertex_shader, 1, &vertex_source, nullptr));
-		check(glShaderSource(fragment_shader, 1, &fragment_source, nullptr));
-
-		check(glCompileShader(vertex_shader));
-		check(glCompileShader(fragment_shader));
-
-
-		check(program = glCreateProgram());
-
-		check(glAttachShader(program, vertex_shader));
-		check(glAttachShader(program, fragment_shader));
-
-		check(glLinkProgram(program));
-		check(check(glValidateProgram(program)));
-
-		check(glDeleteShader(vertex_shader));
-		check(glDeleteShader(fragment_shader));
+		compile(vertex_src, fragment_src);
 	}
 
 	Shader(std::string filename) {
@@ -88,9 +66,12 @@ public:
 
 		std::string vertex_source_string = vertex_src.str();
 		std::string fragment_source_string = fragment_src.str();
-		vertex_source = vertex_source_string.c_str();
-		fragment_source = fragment_source_string.c_str();
+		compile(vertex_source_string, fragment_source_string);
+	}
 
+	void compile(std::string vertex_src, std::string fragment_src) {
+		vertex_source = vertex_src.c_str();
+		fragment_source = fragment_src.c_str();
 
 		check(vertex_shader = glCreateShader(GL_VERTEX_SHADER));
 		check(fragment_shader = glCreateShader(GL_FRAGMENT_SHADER));
@@ -108,7 +89,7 @@ public:
 		check(glAttachShader(program, fragment_shader));
 
 		check(glLinkProgram(program));
-		check(glValidateProgram(program));
+		check(check(glValidateProgram(program)));
 
 		check(glDeleteShader(vertex_shader));
 		check(glDeleteShader(fragment_shader));
@@ -167,5 +148,9 @@ public:
 
 	void set_uniform1i(int uniform_location, int val) {
 		check(glUniform1i(uniform_location, val));
+	}
+
+	void reload() {
+
 	}
 };

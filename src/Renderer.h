@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 #include "Vbo.h"
-#include "Vao.h";
+#include "Vao.h"
 #include "Shader.h"
 #include "Primitives.h"
 
