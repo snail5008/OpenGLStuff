@@ -47,6 +47,8 @@ int main() {
 
 	Renderer renderer;
 	bool r_pressed = false;
+	bool w_pressed = false;
+	bool wireframe = false;
 	while (!window.should_close()) {
 
 		program->set_uniform1f(u_Time, (float)glfwGetTime());
@@ -63,7 +65,6 @@ int main() {
 		// reload shaders on 'R'
 		if (is_pressed(window, GLFW_KEY_R)) {
 			if (!r_pressed) {
-				delete program;
 				program = new Shader("res/shaders/default.glsl");
 				std::cout << "\n--- RELOADED SHADERS ---\n\n";
 				program->get_errors();
@@ -76,9 +77,20 @@ int main() {
 			r_pressed = false;
 		}
 
+		// change to wireframe on 'W'
 		if (is_pressed(window, GLFW_KEY_W)) {
-			renderer.wireframe(true);
+			if (!w_pressed) {
+				wireframe = !wireframe;
+				renderer.wireframe(wireframe);
+			}
+			w_pressed = true;
 		}
+		else {
+			w_pressed = false;
+		}
+		
+
+		// exit on 'ESC'
 		if (is_pressed(window, GLFW_KEY_ESCAPE)) {
 			window.should_close(true);
 		}
