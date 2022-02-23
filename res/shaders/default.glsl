@@ -20,8 +20,11 @@ void main() {
 out vec3 color;
 
 uniform float u_Time;
+uniform bool u_AnimationDisabled;
 
 void main() {
-	//color = vec3(abs(cos(u_Time*0.5)), 0.9, abs(sin(u_Time)));
-	color = vec3(0.6, 0.6, 1);
+	if (!u_AnimationDisabled)
+		color = vec3(abs(cos(u_Time*0.5)), 0.9, abs(sin(u_Time)));
+	else
+		color = vec3(0.6, 0.6, 1);
 }
