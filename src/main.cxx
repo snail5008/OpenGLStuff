@@ -41,7 +41,6 @@ int main() {
 	Shader program("res/shaders/default.glsl");
 	int u_Time = program.uniform_location("u_Time");
 	int u_AnimationDisabled = program.uniform_location("u_AnimationDisabled");
-	program.set_uniform1i(u_AnimationDisabled, false);
 	program.get_errors();
 	program.use();
 
@@ -50,6 +49,7 @@ int main() {
 	while (!window.should_close()) {
 
 		program.set_uniform1f(u_Time, (float)glfwGetTime());
+		program.set_uniform1i(u_AnimationDisabled, true);
 		renderer.clear_colour(0.2, 0.2, 0.2);
 
 		vao.draw_arrays(6);
