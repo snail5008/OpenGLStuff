@@ -5,6 +5,7 @@
 #include "Vao.h"
 #include "Shader.h"
 #include "Primitives.h"
+#include "Mesh.h"
 
 class Renderer {
 public:

@@ -1,103 +1,91 @@
 #include <iostream>
-#include <vector>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "Window.h"
-#include "Shader.h"
-#include "Vao.h"
-#include "Vbo.h"
-#include "Ebo.h"
 #include "Renderer.h"
-#include "Primitives.h"
+#include "Mesh.h"
 
-#define is_pressed(window, key) glfwGetKey(window.window, key) == GLFW_PRESS
-#define is_released(window, key) glfwGetKey(window.window, key) == GLFW_RELEASE
+float cube[108]{
+    -0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f,  0.5f, -0.5f,
+     0.5f,  0.5f, -0.5f,
+    -0.5f,  0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
 
-Window window(800, 600, "triangle", 4);
+    -0.5f, -0.5f,  0.5f,
+     0.5f, -0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f,  0.5f,
+    -0.5f, -0.5f,  0.5f,
 
-bool FULLSCREEN = false;
-void key_callback(GLFWwindow* win, int key, int scancode, int action, int mods) {
-	if ((key == GLFW_KEY_F && action == GLFW_PRESS) || (key == GLFW_KEY_F11 && action == GLFW_PRESS)) {
-		FULLSCREEN = !FULLSCREEN;
-		window.fullscreen(FULLSCREEN);
-	}
-}
+    -0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f,  0.5f,
+    -0.5f,  0.5f,  0.5f,
 
-void reload_shader(Shader* program, bool& pressed) {
-	
-}
+     0.5f,  0.5f,  0.5f,
+     0.5f,  0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+
+    -0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f,  0.5f,
+     0.5f, -0.5f,  0.5f,
+    -0.5f, -0.5f,  0.5f,
+    -0.5f, -0.5f, -0.5f,
+
+    -0.5f,  0.5f, -0.5f,
+     0.5f,  0.5f, -0.5f,
+     0.5f,  0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f, -0.5f
+};
 
 int main() {
+	Window window(800, 600, "OpenGL");
 	window.default_setup();
-	window.set_key_callback(key_callback);
-	window.info();
-
-	Vao vao;
-	Vbo vbo;
-	vao.bind();
-	vbo.bind();
-	vbo.data(sizeof(Primitives::QUAD_WITHOUT_EBO), Primitives::QUAD_WITHOUT_EBO);
-	vao.vertex_attrib_ptr(0, 2, sizeof(float) * 2);
-
-	Shader* program = new Shader("res/shaders/default.glsl");
-	program->get_errors();
-	program->use();
-	int u_Time = program->uniform_location("u_Time");
-	int u_AnimationDisabled = program->uniform_location("u_AnimationDisabled");
-
 
 	Renderer renderer;
-	bool r_pressed = false;
-	bool w_pressed = false;
-	bool wireframe = false;
+	Mesh3D mesh(cube, 108);
+	
+	Shader shader("res/shaders/default.glsl");
+	shader.get_errors();
+	shader.use();
+
+    mesh.set_scale(0.5f, 0.5f, 0.5f);
+    mesh.set_translation(0.0f, 0.0f, -4.0f);
+
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+    int transform_location = shader.uniform_location("transform");
+    int projection_location = shader.uniform_location("projection");
+
+    shader.set_uniform_matrix4f(projection_location, glm::value_ptr(projection));
+
+
+
 	while (!window.should_close()) {
+		renderer.clear_colour(0.1f, 0.1f, 0.1f);
+		mesh.draw();
 
-		program->set_uniform1f(u_Time, (float)glfwGetTime());
-		program->set_uniform1i(u_AnimationDisabled, false);
+        mesh.set_rotation_x((float)sin(glfwGetTime()));
+        mesh.set_rotation_y((float)sin(glfwGetTime()));
+        mesh.set_rotation_z((float)cos(glfwGetTime())*2);
 
-		renderer.clear_colour(0.2f, 0.2f, 0.2f);
-
-		vao.draw_arrays(6);
+        shader.set_uniform_matrix4f(transform_location, glm::value_ptr(mesh.transform));
 
 		window.swap_buffers();
 		window.poll_events();
-
-
-		// reload shaders on 'R'
-		if (is_pressed(window, GLFW_KEY_R)) {
-			if (!r_pressed) {
-				program = new Shader("res/shaders/default.glsl");
-				std::cout << "\n--- RELOADED SHADERS ---\n\n";
-				program->get_errors();
-				program->use();
-				std::cout << "--------\n\n";
-			}
-			r_pressed = true;
-		}
-		else {
-			r_pressed = false;
-		}
-
-		// change to wireframe on 'W'
-		if (is_pressed(window, GLFW_KEY_W)) {
-			if (!w_pressed) {
-				wireframe = !wireframe;
-				renderer.wireframe(wireframe);
-			}
-			w_pressed = true;
-		}
-		else {
-			w_pressed = false;
-		}
-		
-
-		// exit on 'ESC'
-		if (is_pressed(window, GLFW_KEY_ESCAPE)) {
-			window.should_close(true);
-		}
-		
 	}
-
-	delete program;
 
 	return 0;
 }

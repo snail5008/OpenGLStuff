@@ -150,7 +150,7 @@ public:
 		check(glUniform1i(uniform_location, val));
 	}
 
-	void reload() {
-
+	void set_uniform_matrix4f(int uniform_location, float* val) {
+		check(glUniformMatrix4fv(uniform_location, 1, false, val));
 	}
 };

@@ -47,8 +47,17 @@
     <ClInclude Include="src\Ebo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vectors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
+    <None Include="src\old_main.cxx.dontlink">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
